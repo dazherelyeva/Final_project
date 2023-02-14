@@ -1,0 +1,17 @@
+<!-- login.html -->
+{% extends 'home.html' %}
+
+{% block content %}
+  <h2>Login</h2>
+  <form method="post">
+  <fieldset style="border:3px solid steelblue;
+                   background-color:aliceblue;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign In</button>
+{#      <button type="submit">Sign Up</button>#}
+  </fieldset>
+  </form>
+
+        <p>Don't have an account yet? <a href="{% url 'registration' %}">Sign Up</a></p>
+{% endblock %}

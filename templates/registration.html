@@ -1,0 +1,18 @@
+
+{% extends 'home.html' %}
+
+{% block content %}
+  <h2>Choose an option: </h2>
+  <form method="post">
+  <fieldset style="border:3px solid steelblue;
+                   background-color:aliceblue;">
+    {% csrf_token %}
+                <div class="col-lg-6">
+                        <a type="button" class="btn btn-block" href="{% url 'add_owner' %}">I am an owner</a>
+                       </div>
+                       <div class="col-lg-6">
+                        <a type="button" class="btn btn-block" href="{% url 'add_walker' %}">I am a walker</a>
+                       </div>
+  </fieldset>
+  </form>
+{% endblock %}

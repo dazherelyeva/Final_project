@@ -1,0 +1,50 @@
+{% comment %}<div class="container">
+
+    <form method="POST">
+      <fieldset>
+        <legend>Form</legend>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">
+        Submit
+        </button>
+      </fieldset>
+    </form>
+</div>{% endcomment %}
+
+{% comment %}{% extends 'home.html' %}{% endcomment %}
+{% block content %}
+{#  {% include 'messages.html' %}#}
+  <h2>Add your dog</h2>
+  <form method="post">
+  <fieldset style="border:3px solid steelblue;
+                   background-color:aliceblue;">
+    {% csrf_token %}
+                <form method="post">
+    <fieldset style="border:3px solid steelblue;
+                   background-color:aliceblue;">
+        <legend>Tell more about your dog</legend>
+    {% csrf_token %}
+    <input type="text" name="nickname" placeholder="nickname"><br /><br />
+    <input type="text" name="breed" placeholder="breed"><br /><br />
+    <input type="text" name="description" placeholder="description"><br /><br />
+    <select name="size">
+        {% for size in sizes %}
+            <option value="{{ size.0 }}">{{ size.1 }}</option>
+        {% endfor %}
+    </select><br /><br />
+    <button>Submit</button><br /><br />
+    </fieldset>
+</form>
+
+<h2>Your pets</h2>
+<ul>
+  {% for pet in pets %}
+    <li>{{ pet.nickname }}</li>
+  {% endfor %}
+</ul>
+  </fieldset>
+  </form>
+{% endblock %}
+
+

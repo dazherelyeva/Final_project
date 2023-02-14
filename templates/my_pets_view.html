@@ -1,0 +1,38 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+  <h2>My dogs</h2>
+  <form method="post">
+  <fieldset style="border:3px solid steelblue;
+                   background-color:aliceblue;">
+<table>
+   <legend>Detailed information</legend> {# add only owner's dogs#}
+    <tr>
+        <th>Dog's nickname</th>
+        <th>Breed</th>
+        <th>Description</th>
+        <th>Dog size</th>
+    </tr>
+        <tr>
+            {% for pet in pets %}
+            <td>{{ pet.nickname }}</td>
+            <td>{{ pet.breed }}</td>
+            <td>{{ pet.description }}</td>
+            <td>{{ pet.size }}</td>
+        </tr>
+            {% endfor %}
+</table>
+  </fieldset>
+  </form>
+{% endblock %}
+<h2>Your pets</h2>
+
+<link rel="stylesheet" href="{% static 'css/message.css' %}">
+<div class="messages {{ messages.tags }}">{{ messages }}</div>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}

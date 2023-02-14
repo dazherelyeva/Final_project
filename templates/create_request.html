@@ -1,0 +1,42 @@
+{% extends 'home.html' %}
+{% block content %}
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Create Request</title>
+  </head>
+  <body>
+    <h1>Create Request</h1>
+    <form method="post">
+<fieldset style="border:3px solid steelblue;
+                   background-color:aliceblue;">
+      {% csrf_token %}
+      <div>
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date">
+      </div>
+      <div>
+        <label for="pet">Pet:</label>
+        <select id="pet" name="pet">
+          {% for pet in pets %}
+          <option value="{{ pet.id }}">{{ pet.nickname }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price">
+      </div>
+      <div>
+        <label for="duration">Duration:</label>
+        <input type="text" id="duration" name="duration">
+      </div>
+<div>
+    <input type="hidden" name="owner_id" value="{{ owner.id }}">
+</div>
+      <button type="submit">Create Request</button>
+    </form>
+  </body>
+</html>
+      </fieldset>
+{% endblock %}

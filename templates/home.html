@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+<head>
+  <title>Pet walking</title>
+  <meta name="description" content="Local walkers near you">
+  <meta name="keywords" content="The best dog walkers in your neighborhood">
+  <link rel="stylesheet" href="{% static 'css/project_style.css' %}">
+</head>
+<body>
+            <header>
+    <h1>Pet walking</h1>
+    {% if user.is_authenticated %}
+        {% if user.is_owner %}
+            <a href="{% url 'logout' %}">Logout</a><br /><br />
+            <a href="{% url 'add_pet' %}">Add dog &#128021;</a><br /><br />
+            <a href="{% url 'my_pets_view' %}">My dogs</a><br /><br />
+            <a href="{% url 'create_request' %}">Create my request &#128197;</a><br /><br />
+            <a href="{% url 'owner_requests_view' %}">My requests</a>
+        {% endif %}
+        {% if user.is_walker %}
+            <a href="{% url 'logout' %}">Logout</a><br /><br />
+            <a href="{% url 'all_created_requests' %}"> Choose a walk  </a><br /><br />
+            <a href="{% url 'selected_requests' %}">My walks &#128197;</a>
+        {% endif %}
+            </header>
+        <header>
+    {% else %}
+        <a href="{% url 'about_us' %}">How it works &#128021;</a><br /><br />
+        <a href="{% url 'registration' %}">Registration</a><br /><br />
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <style>
+    img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    }
+    </style>
+    <img src="{% static 'dream.jpg' %}" alt="Paris" width="400" height="300">
+  <footer>
+    &copy; {{ current_date|date:"Y" }} Pet walking
+  </footer>
+  <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>
+

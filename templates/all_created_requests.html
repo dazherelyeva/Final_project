@@ -1,0 +1,46 @@
+
+
+{% extends 'home.html' %}
+{% load static %}
+{% block content %}
+  <h2>Available requests</h2>
+  <form method="post">
+  {% csrf_token %}
+  <fieldset style="border:3px solid steelblue;
+                   background-color:aliceblue;">
+<table>
+   <legend>Detailed information</legend> {# add only owner's dogs #}
+    <tr>
+        <th>Select</th>
+        <th>Dog's nickname</th>
+        <th>Date</th>
+        <th>Price</th>
+        <th>Duration</th>
+        <th>Status</th>
+    </tr>
+        <tr>
+            {% for request in requests %}
+                {% if request.available_for_booking %}
+                    <td><input type="checkbox" name="request" value="{{ request.id }}"></td>
+                    <td>{{ request.pet }}</td>
+                    <td>{{ request.date }}</td>
+                    <td>{{ request.price }}</td>
+                    <td>{{ request.duration }}</td>
+                    <td>{% if request.available_for_booking %}
+                                <p>Waiting</p>
+                        {% endif %}
+                    </td>
+                {% endif %}
+        </tr>
+            {% endfor %}
+</table>
+  </fieldset>
+  <input type="submit" value="Confirm">
+  </form>
+{% endblock %}
+
+{#{% if not request.available_for_booking %}#}
+{#                            <p>No longer available</p>#}
+{#                        {% else %}#}
+{#                            <p>Waiting for respond</p>#}
+{#                        {% endif %}#}
