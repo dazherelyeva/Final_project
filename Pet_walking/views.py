@@ -13,16 +13,26 @@ from Pet_walking.forms import Requests
 
 
 class HomeView(View):
+    """
+    Displays the home page of the website.
+    """
     def get(self, request):
         return render(request, 'home.html')
 
 
 class Registration(View):
+    """
+    Displays the registration page of the website where a person can
+    choose the type of user under which wants to enter the page.
+    """
     def get(self, request):
         return render(request, 'registration.html')
 
 
 class OwnerRegistration(CreateView):
+    """
+    Handles the registration process for owners.
+    """
     model = User
     form_class = OwnerSignUpForm
     template_name = 'add_owner.html'
@@ -40,6 +50,9 @@ class OwnerRegistration(CreateView):
 
 
 class WalkerRegistration(CreateView):
+    """
+    Handles the registration process for walkers.
+    """
     model = User
     form_class = WalkerSignUpForm
     template_name = 'add_walker.html'
@@ -53,11 +66,14 @@ class WalkerRegistration(CreateView):
         return redirect('home')
 
 
-class LoginForm:
-    pass
+# class LoginForm:
+#     pass
 
 
 class LoginView(View):
+    """
+    Displays the login page and handles user authentication.
+    """
     def get(self, request):
         form = AuthenticationForm()
         return render(request, 'login.html', {'form': form})
@@ -82,6 +98,9 @@ class LoginView(View):
 
 
 class LogoutView(View):
+    """
+    View responsible for logging out the user.
+    """
     def get(self, request):
         logout(request)
         request.session.delete()
@@ -89,6 +108,9 @@ class LogoutView(View):
 
 
 class AddPetView(View):
+    """
+    View responsible for adding a pet to the user's list of pets.
+    """
     def get(self, request):
         if request.user.is_authenticated:
             user = request.user
@@ -116,6 +138,9 @@ class AddPetView(View):
 
 
 class MyPetsView(View):
+    """
+    View responsible for displaying the list of pets belonging to the currently logged in user.
+    """
     def get(self, request):
         if request.user.is_authenticated:
             user = request.user
@@ -126,11 +151,15 @@ class MyPetsView(View):
             return render(request, 'messages.html', {'message': message})
 
 
-class RequestForm:
-    pass
+# class RequestForm:
+#     pass
 
 
 class CreateRequestView(View):
+    """
+    A view that handles creating a new request for a pet
+    and displays a list of requests that was added by the user.
+    """
     def get(self, http_request):
         if http_request.user.is_owner:
             pets = Pet.objects.filter(owner=http_request.user)
@@ -150,6 +179,9 @@ class CreateRequestView(View):
 
 
 class OwnerRequestsView(View):
+    """
+    A view that displays a list of the requests associated with the owner's pets.
+    """
     def get(self, http_request):
         if http_request.user.is_owner:
             pets = Pet.objects.filter(owner=http_request.user)
@@ -158,10 +190,12 @@ class OwnerRequestsView(View):
             pets = Pet.objects.all()
             requests = Request.objects.all()
         return render(http_request, 'owner_requests_view.html', {'pets': pets, 'requests': requests})
-# 'available_statuses': ['Waiting for respond', 'No longer available'
 
 
 class AllCreatedRequests(View):
+    """
+    A view that displays a list of all created requests and available only for walkers.
+    """
     def get(self, http_request):
         if http_request.user.is_owner:
             pets = Pet.objects.filter(owner=http_request.user).order_by("nickname")
@@ -175,25 +209,28 @@ class AllCreatedRequests(View):
     def post(self, http_request):
         form = Requests(http_request.POST)
         if form.is_valid():
-            #new_status = form.cleaned_data['available_for_booking']
+            # new_status = form.cleaned_data['available_for_booking']
             selected_requests = http_request.POST.getlist('request')
             for request_id in selected_requests:
                 request = Request.objects.get(id=request_id)
-                #new_status = request.POST.get('available_for_booking', True) == False
+                # new_status = request.POST.get('available_for_booking', True) == False
                 request.available_for_booking = False
                 request.walker = http_request.user
                 request.save()
             message = messages.success(http_request, 'You successfully reserved a walk!')
-            return render(http_request, 'walkermessage.html', {'message': message, 'form': form})
+            return render(http_request, 'walker_message.html', {'message': message, 'form': form})
 
 
 class SelectedRequests(View):
+    """
+    It retrieves and displays requests assigned to a walker that is currently logged in.
+    """
     def get(self, request):
         if request.user.is_authenticated:
-            #pets = Request.objects.filter(walker=request.user)
+            # pets = Request.objects.filter(walker=request.user)
             requests = Request.objects.filter(walker=request.user)
             print(requests)
             return render(request, 'selected_requests.html', {'requests': requests})
         else:
             message = messages.error(request, "You must be logged in to see your requests.")
-            return render(request, 'walkermessage.html', {'message': message})
+            return render(request, 'walker_message.html', {'message': message})

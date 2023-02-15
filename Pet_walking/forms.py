@@ -1,10 +1,14 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
-from .models import Owner, User, Walker, Request
+from .models import Owner, User, Walker
 
 
 class OwnerSignUpForm(UserCreationForm):
+    """
+    A form for signing up an owner, extending Django's UserCreationForm with additional required
+     fields for first name, last name, city, street, number of flat, and phone number.
+    """
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     city = forms.CharField(required=True)
@@ -17,6 +21,10 @@ class OwnerSignUpForm(UserCreationForm):
 
     @transaction.atomic
     def data_save(self):
+        """
+        Save the owner's data and create an Owner object.
+        :return:  The saved user object.
+        """
         user = super().save(commit=False)
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
@@ -32,6 +40,10 @@ class OwnerSignUpForm(UserCreationForm):
 
 
 class WalkerSignUpForm(UserCreationForm):
+    """
+    A form for signing up a walker, extending Django's UserCreationForm with
+     additional required fields for first name, last name, and phone number.
+    """
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     phone_number = forms.CharField(required=True)
@@ -41,6 +53,10 @@ class WalkerSignUpForm(UserCreationForm):
 
     @transaction.atomic
     def data_save(self):
+        """
+        Save the walker's data and create a Walker object.
+        :return: The saved user object.
+        """
         user = super().save(commit=False)
         user.first_name = self.cleaned_data.get('first_name')
         user.last_name = self.cleaned_data.get('last_name')
@@ -53,4 +69,7 @@ class WalkerSignUpForm(UserCreationForm):
 
 
 class Requests(forms.Form):
+    """
+    A form with a single boolean field for marking a walker as available for booking requests.
+    """
     available_for_booking = forms.BooleanField(label='Available for Booking', required=False)
