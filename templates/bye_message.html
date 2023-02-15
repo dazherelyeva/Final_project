@@ -1,0 +1,14 @@
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-dismissible alert-success">
+      <strong>{{message}}</strong>
+    </div>
+ {% endfor %}
+{% endif %}
+{% block content %}
+    <fieldset style="border:3px solid steelblue;
+                   background-color:aliceblue;">
+<a href="{% url 'home' %}">Go to Homepage</a><br /><br />
+
+  </fieldset>
+{% endblock %}

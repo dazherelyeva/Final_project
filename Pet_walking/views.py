@@ -66,10 +66,6 @@ class WalkerRegistration(CreateView):
         return redirect('home')
 
 
-# class LoginForm:
-#     pass
-
-
 class LoginView(View):
     """
     Displays the login page and handles user authentication.
@@ -91,10 +87,12 @@ class LoginView(View):
                 http_request.session['user_type'] = 'walker'
                 http_request.session['user_id'] = user.walker.id
             # Redirect the user to the home page
-            return redirect('home')
+            message = messages.error(http_request, f"Hello, {user.username}!")
+            return render(http_request, 'hello_message.html', {'message': message})
         else:
             # Return an error message to the user
-            return render(http_request, 'login.html', {'error': 'Invalid username or password'})
+            message = messages.error(http_request, f"Wrong credentials!")
+            return render(http_request, 'wrong_credentials.html', {'message': message})
 
 
 class LogoutView(View):
@@ -104,7 +102,8 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         request.session.delete()
-        return redirect('home')
+        message = messages.error(request, f"Goodbye!")
+        return render(request, 'bye_message.html', {'message': message})
 
 
 class AddPetView(View):
@@ -128,10 +127,15 @@ class AddPetView(View):
             breed = request.POST['breed']
             description = request.POST['description']
             size = request.POST['size']
-            Pet.objects.create(nickname=nickname, breed=breed, description=description, size=size, owner=user)
-            message = messages.success(request, 'Your pet was successfully added!')
-            return render(request, 'messages.html',
-                          {'message': message, 'pets': pets, 'sizes': SIZES})
+            check_nickname = Pet.objects.filter(nickname=nickname)
+            if check_nickname:
+                message = messages.error(request, "Dog with this nickname already exists.")
+                return render(request, 'message_for_add_pet.html', {'message': message})
+            else:
+                Pet.objects.create(nickname=nickname, breed=breed, description=description, size=size, owner=user)
+                message = messages.success(request, 'Your pet was successfully added!')
+                return render(request, 'messages.html',
+                              {'message': message, 'pets': pets, 'sizes': SIZES})
         else:
             message = messages.error(request, "You must be logged in to add a pet.")
             return render(request, 'messages.html', {'message': message})
@@ -149,10 +153,6 @@ class MyPetsView(View):
         else:
             message = messages.error(request, "You must be logged in to see your pets.")
             return render(request, 'messages.html', {'message': message})
-
-
-# class RequestForm:
-#     pass
 
 
 class CreateRequestView(View):
@@ -227,9 +227,7 @@ class SelectedRequests(View):
     """
     def get(self, request):
         if request.user.is_authenticated:
-            # pets = Request.objects.filter(walker=request.user)
             requests = Request.objects.filter(walker=request.user)
-            print(requests)
             return render(request, 'selected_requests.html', {'requests': requests})
         else:
             message = messages.error(request, "You must be logged in to see your requests.")

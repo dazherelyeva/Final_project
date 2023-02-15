@@ -1,17 +1,17 @@
 {% extends 'home.html' %}
 
 {% block content %}
-  <h2>Login</h2>
+  <h2>Walker registration form:</h2>
   <form method="post">
   <fieldset style="border:3px solid steelblue;
                    background-color:aliceblue;">
     {% csrf_token %}
-                <form method="post">
+      <form method="post">
         <legend>Contact information</legend>
     {% csrf_token %}
                     {{form.as_p}}
     <button>Submit</button><br /><br />
-</form>
+    </form>
   </fieldset>
   </form>
 {% endblock %}

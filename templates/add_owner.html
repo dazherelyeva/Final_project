@@ -1,18 +1,19 @@
 {% extends 'home.html' %}
 
 {% block content %}
-  <h2>Owner registration form</h2>
+  <h2>Owner registration form:</h2>
   <form method="post">
   <fieldset style="border:3px solid steelblue;
                    background-color:aliceblue;">
     {% csrf_token %}
         <body>
-            <form action="{% url 'add_owner' %}" method="POST" novalidate> <br /><br />
-            {% csrf_token %}
-            {{form.as_p}}
-            <input type="submit" value="Sign Up" class="btn btn-block btn-primary">
+                <form action="{% url 'add_owner' %}" method="POST" novalidate> <br /><br />
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" value="Sign Up" class="btn btn-block btn-primary">
+                </form>
         </body>
-            </form>
+
 
   </fieldset>
   </form>
