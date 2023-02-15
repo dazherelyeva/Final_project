@@ -1,0 +1,2 @@
+The final CodersLab project.
+Pet walking connects dog owners with trusted local people who would love to look after their dog. Aplication make it easy to arrange walks, playtime, overnight stays or holidays. Aim of this aplication is to help dog owners when they need it, give dogs more exercise and playtime and to allow people without a dog to spend quality time with one. That's why I think everyone who involved in this process is a winer.
