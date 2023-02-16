@@ -38,15 +38,21 @@ class OwnerRegistration(CreateView):
     template_name = 'add_owner.html'
 
     def form_valid(self, form):
+        request = self.request
         user = form.save()
         phone_number = form.cleaned_data['phone_number']
         city = form.cleaned_data['city']
         number_of_flat = form.cleaned_data['number_of_flat']
         street = form.cleaned_data['street']
         owner = Owner(user=user, city=city, street=street, number_of_flat=number_of_flat, phone_number=phone_number)
-        owner.save()
-        login(self.request, user)
-        return redirect('home')
+        check_phone_number = Owner.objects.filter(phone_number=phone_number)
+        if check_phone_number:
+            message = messages.error(request, "This phone number already exists. Try again!")
+            return render(request, 'wrong_number_message.html', {'message': message})
+        else:
+            owner.save()
+            login(request, user)
+            return redirect('home')
 
 
 class WalkerRegistration(CreateView):
